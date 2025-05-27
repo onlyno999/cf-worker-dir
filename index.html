@@ -1,228 +1,188 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>自定义导航 - Cloudflare Workers Dir</title>
-  <link href="https://cdn.jsdelivr.net/npm/semantic-ui-css@2.4.1/semantic.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/gh/sleepwood/cf-worker-dir@0.1.1/style.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui-css@2.4.1/semantic.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>为世界和平祈祷</title>
   <style>
-    body {
-      background: #f9f9f9;
+    * {
+      box-sizing: border-box;
     }
-    .ui.cards>.card {
-      min-width: 220px;
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background-color: #111;
+      color: #eee;
+      font-family: "Noto Sans", "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      line-height: 1.8;
     }
-    .footer {
+    header {
       text-align: center;
-      padding: 2em;
-      font-size: 0.9em;
-      color: #666;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid #444;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 1px 1px 3px #000;
+    }
+    header p {
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+    .candle-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin: 2rem 1rem;
+    }
+    .candle {
+      position: relative;
+      width: 20px;
+      height: 60px;
+      background: #eee;
+      border-radius: 5px;
+      animation: candle-move 2s ease-in-out infinite alternate;
+    }
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 20px;
+      background: radial-gradient(ellipse at center, #ff0 0%, #f90 100%);
+      border-radius: 50%;
+      animation: flicker 0.8s infinite alternate ease-in-out;
+      opacity: 0.9;
+    }
+    @keyframes candle-move {
+      0% { transform: rotate(-1deg) translateY(0); }
+      100% { transform: rotate(1deg) translateY(-2px); }
+    }
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scaleY(1); opacity: 1; }
+      100% { transform: translateX(-48%) scaleY(1.15); opacity: 0.7; }
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    article {
+      margin-bottom: 2rem;
+      border-left: 4px solid #555;
+      padding-left: 1rem;
+    }
+    article h2 {
+      font-size: 1.5rem;
+      color: #ddd;
+    }
+    article p {
+      color: #ccc;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      border-top: 1px solid #444;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      article h2 {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <div id="head" class="ui inverted vertical masthead center aligned segment">
-      <div class="ui container">
-        <div class="ui large secondary inverted menu">
-          <div class="item">
-            <p id="hitokoto">相聚于互联网，惜当初相见。</p>
-          </div>
-        </div>
-      </div>
-      <div class="ui text container">
-        <h1 class="ui inverted header">
-          <i class="sitemap icon"></i>
-          <div class="content">
-            自定义导航
-            <div class="sub header">Cloudflare Workers Dir</div>
-          </div>
-        </h1>
-        <div class="ui left corner labeled right icon fluid large input">
-          <div class="ui left corner label">
-            <img id="search-fav" class="left floated avatar ui image" src="https://www.baidu.com/favicon.ico">
-          </div>
-          <input id="searchinput" type="search" placeholder="搜索你想要知道的……" autocomplete="off">
-          <i class="inverted circular search link icon"></i>
-        </div>
-        <div id="sengine" class="ui bottom attached tabular inverted secondary menu">
-          <a class="active item" data-url="https://www.baidu.com/s?wd=$s">百度</a>
-          <a class="item" data-url="https://www.google.com/search?q=$s">谷歌</a>
-          <a class="item" data-url="https://www.bing.com/search?q=$s">必应</a>
-          <a class="item" data-url="https://www.sogou.com/web?query=$s">搜狗</a>
-        </div>
-      </div>
-    </div>
+    <h1>为世界和平祈祷</h1>
+    <p>我们怀着希望团结一心，纪念逝者，祈愿一个没有战争的未来。</p>
   </header>
 
-  <!-- Main -->
-  <main>
-    <div class="ui container">
-      <!-- 技术 -->
-      <div class="ui basic segment">
-        <h4 class="ui horizontal divider header"><i class="code icon"></i> 技术</h4>
-        <div class="ui four stackable cards">
-          <!-- 技术链接列表 -->
-          <!-- 请替换 icon.horse 域名部分为你需要的 -->
-          <a class="card" href="https://www.oschina.net/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/oschina.net">
-              <div class="header">开源中国</div><div class="meta">技术社区</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.v2ex.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/v2ex.com">
-              <div class="header">V2EX</div><div class="meta">程序员论坛</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.csdn.net/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/csdn.net">
-              <div class="header">CSDN</div><div class="meta">开发文档</div>
-            </div>
-          </a>
-          <a class="card" href="https://github.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/github.com">
-              <div class="header">GitHub</div><div class="meta">开源托管</div>
-            </div>
-          </a>
-          <a class="card" href="https://stackoverflow.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/stackoverflow.com">
-              <div class="header">StackOverflow</div><div class="meta">技术问答</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.cnblogs.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/cnblogs.com">
-              <div class="header">博客园</div><div class="meta">开发笔记</div>
-            </div>
-          </a>
-          <a class="card" href="https://juejin.cn/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/juejin.cn">
-              <div class="header">掘金</div><div class="meta">开发者社区</div>
-            </div>
-          </a>
-          <a class="card" href="https://segmentfault.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/segmentfault.com">
-              <div class="header">思否</div><div class="meta">技术问答</div>
-            </div>
-          </a>
-          <a class="card" href="https://gitee.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/gitee.com">
-              <div class="header">Gitee</div><div class="meta">国产代码托管</div>
-            </div>
-          </a>
-          <a class="card" href="https://developer.mozilla.org/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/developer.mozilla.org">
-              <div class="header">MDN 文档</div><div class="meta">Web百科</div>
-            </div>
-          </a>
-          <a class="card" href="https://leetcode.cn/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/leetcode.cn">
-              <div class="header">力扣</div><div class="meta">算法平台</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.freecodecamp.org/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/freecodecamp.org">
-              <div class="header">FreeCodeCamp</div><div class="meta">自学编程</div>
-            </div>
-          </a>
-          <a class="card" href="https://zhuanlan.zhihu.com/p/tech" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/zhihu.com">
-              <div class="header">知乎编程</div><div class="meta">技术专栏</div>
-            </div>
-          </a>
-          <a class="card" href="https://developer.aliyun.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/developer.aliyun.com">
-              <div class="header">阿里开发者</div><div class="meta">技术平台</div>
-            </div>
-          </a>
-          <a class="card" href="https://cloud.tencent.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/cloud.tencent.com">
-              <div class="header">腾讯云</div><div class="meta">云服务</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.aliyun.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/aliyun.com">
-              <div class="header">阿里云</div><div class="meta">云计算</div>
-            </div>
-          </a>
-        </div>
-      </div>
+  <div class="candle-container">
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+  </div>
 
-      <!-- 学习 -->
-      <div class="ui basic segment">
-        <h4 class="ui horizontal divider header"><i class="graduation cap icon"></i> 学习</h4>
-        <div class="ui four stackable cards">
-          <a class="card" href="https://www.w3school.com.cn/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/w3school.com.cn">
-              <div class="header">W3school</div><div class="meta">前端教程</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.runoob.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/runoob.com">
-              <div class="header">菜鸟教程</div><div class="meta">编程速查</div>
-            </div>
-          </a>
-          <a class="card" href="https://www.jianshu.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/jianshu.com">
-              <div class="header">简书</div><div class="meta">写作平台</div>
-            </div>
-          </a>
-          <a class="card" href="https://study.163.com/" target="_blank">
-            <div class="content">
-              <img class="left floated avatar ui image" src="https://icon.horse/icon/study.163.com">
-              <div class="header">网易云课堂</div><div class="meta">在线学习</div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
+  <main>
+    <article>
+      <h2>一个没有冲突的世界</h2>
+      <p>每天，无数人因战争受苦。我们祈祷一个充满对话与理性的世界，而非暴力与纷争。</p>
+    </article>
+
+    <article>
+      <h2>纪念逝去的生命</h2>
+      <p>战争带来了深重的创伤。让我们点亮一支蜡烛，缅怀那些失去生命的人。</p>
+    </article>
+
+    <article>
+      <h2>希望属于未来的孩子</h2>
+      <p>孩子们是未来的希望。愿他们能在和平与安全中成长，不再受战争惊扰。</p>
+    </article>
+
+    <article>
+      <h2>祈祷的力量</h2>
+      <p>每一个善意的举动、每一声真诚的祝福，都能传递和平的力量。</p>
+    </article>
+
+    <article>
+      <h2>民族间的兄弟情谊</h2>
+      <p>每一种语言、文化和传统都值得被尊重。和平源自理解、尊重与团结。</p>
+    </article>
+
+    <article>
+      <h2>沉默的力量</h2>
+      <p>有时，沉默胜过喧嚣。在安静中，我们更加靠近良知与和平。</p>
+    </article>
+
+    <article>
+      <h2>黑暗中的光明</h2>
+      <p>一束微光，也能照亮黑夜。每一个和平的行动，都是世界的希望。</p>
+    </article>
+
+    <article>
+      <h2>我们共同的责任</h2>
+      <p>和平不只是梦想，更是我们共同的责任。愿我们用爱和行动去守护它。</p>
+    </article>
+
+    <article>
+      <h2>用爱重建一切</h2>
+      <p>爱，是愈合战争伤痕的良药。愿被破坏的家园重新焕发生机。</p>
+    </article>
+
+    <article>
+      <h2>对话代替枪声</h2>
+      <p>愿语言代替武器，理性取代仇恨。对话，是通向和平的桥梁。</p>
+    </article>
+
+    <article>
+      <h2>记忆是一座桥梁</h2>
+      <p>铭记历史，不为延续痛苦，而是为让未来不再重蹈覆辙。</p>
+    </article>
+
+    <article>
+      <h2>正义与宽恕</h2>
+      <p>真正的和平，需要正义与宽恕并存。在真相中寻找和解。</p>
+    </article>
+
+    <article>
+      <h2>为每一个生命点灯</h2>
+      <p>每一条逝去的生命都值得被记住。愿烛光照亮他们的名字、梦想与未竟的旅程。</p>
+    </article>
   </main>
 
-  <!-- Footer -->
   <footer>
-    <div class="footer">
-      Powered by <a href="https://github.com/sleepwood/cf-worker-dir" target="_blank">Cf-Worker-Dir</a> &copy; | 基于 MIT License
-    </div>
+    &copy; 2025 为世界和平祈祷. 版权所有.
   </footer>
-
-  <!-- JS -->
-  <script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
-  <script>
-    $('#sengine a').on('click', function (e) {
-      $('#sengine a.active').removeClass('active');
-      $(e.target).addClass('active');
-      $('#search-fav').attr('src', $(e.target).data('url').match(/https{0,1}:\/\/[^\/]+\//)[0] + 'favicon.ico');
-    });
-    $('.search').on('click', function () {
-      var url = $('#sengine a.active').data('url');
-      url = url.replace('$s', $('#searchinput').val());
-      window.open(url);
-    });
-    $('#searchinput').on('keypress', function (event) {
-      if (event.keyCode == 13) $('.search').click();
-    });
-  </script>
 </body>
 </html>
