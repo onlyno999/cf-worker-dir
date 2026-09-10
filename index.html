@@ -41,7 +41,7 @@
       letter-spacing: 1px;
     }
 
-    /* 状态提示条（直观反馈接口调用状态） */
+    /* 状态提示条 */
     .status-bar {
       text-align: center;
       font-size: 12px;
@@ -97,6 +97,15 @@
       line-height: 1.6;
     }
 
+    /* 底部提示文字 */
+    .footer {
+      text-align: center;
+      padding: 24px 16px 32px;
+      font-size: 14px;
+      color: #888888;
+      letter-spacing: 0.5px;
+    }
+
     @media (max-width: 480px) {
       .main-wrapper {
         padding: 14px;
@@ -108,6 +117,10 @@
       .tip-card {
         padding: 16px;
       }
+      .footer {
+        padding: 18px 14px 28px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -117,15 +130,18 @@
     <h1 class="header-title">生活小妙招</h1>
   </header>
 
-  <!-- 接口状态条：绿色代表云端成功，灰色代表本地库兜底 -->
   <div class="status-bar" id="status-bar">正在连接云端生活妙招接口...</div>
 
   <main class="main-wrapper">
     <div class="tip-grid" id="tip-list"></div>
   </main>
 
+  <!-- 网页最底部文案 -->
+  <footer class="footer">
+    每次刷新页面都会获取全新妙招合集 ✨
+  </footer>
+
   <script>
-    // 基础本地备用题库（保证秒开防空屏）
     const fallbackPool = [
       { title: "手机充电更快的小妙招", desc: "打开飞行模式再充电，可以显著提升充电速度。" },
       { title: "马桶黄渍清除法", desc: "倒入小苏打+白醋，静置10分钟后刷洗即可。" },
@@ -141,7 +157,6 @@
       { title: "微波炉快速除味除油", desc: "碗中盛半碗水加入柠檬片微波3分钟，趁蒸汽一擦即净。" }
     ];
 
-    // 解析文本内容自动生成合适标题
     function formatTipItem(text) {
       if (!text) return null;
       let cleanText = text.replace(/^[0-9一二三四五六七八九十]+[、.\s]/, '').trim();
@@ -160,9 +175,7 @@
       return { title, desc: desc || cleanText };
     }
 
-    // 免费接口方案（主接口 + 备选接口）
     async function fetchFromApi() {
-      // 方案 1: 国内韩小韩常用接口
       try {
         const url = `https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}`;
         const res = await fetch(url);
@@ -171,11 +184,8 @@
           const content = json.data?.content || json.data;
           if (content) return formatTipItem(content);
         }
-      } catch (e) {
-        // 静默继续尝试备用源
-      }
+      } catch (e) {}
 
-      // 方案 2: 小歪公共常识接口
       try {
         const res2 = await fetch(`https://api.uomg.com/api/rand.qinghua?format=json`);
         if (res2.ok) {
@@ -192,18 +202,15 @@
       const isWide = window.innerWidth > 1024;
       const count = isWide ? 9 : 6;
 
-      // 1. 先用本地题库打乱展示，秒出首屏
       let currentList = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, count);
       render(currentList);
 
-      // 如果当前是 file:// 协议本地运行，给予明确提示
       if (window.location.protocol === 'file:') {
-        statusBar.innerText = "提示：当前是本地直接双击打开 (file://)，浏览器会拦截跨域请求。上传到服务器/静态托管后即可正常请求云端。";
+        statusBar.innerText = "提示：当前为本地直接打开 (file://)，上传至服务器或网站托管后即可连通云端接口。";
         statusBar.style.color = "#d97706";
         return;
       }
 
-      // 2. 依次请求 3 条最新接口数据填充到卡片头部
       let successCount = 0;
       for (let i = 0; i < Math.min(count, 3); i++) {
         const apiItem = await fetchFromApi();
@@ -218,7 +225,7 @@
         statusBar.innerText = `● 云端接口已连通：已动态更新 ${successCount} 条实时妙招`;
         statusBar.style.color = "#16a34a";
       } else {
-        statusBar.innerText = "● 当前使用本地随机题库（云端接口暂时休眠，刷新重试）";
+        statusBar.innerText = "● 当前使用本地题库（云端接口响应中，刷新重试）";
         statusBar.style.color = "#666666";
       }
     }
