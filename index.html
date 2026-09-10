@@ -1,188 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prayers for World Peace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活小妙招</title>
   <style>
     * {
       box-sizing: border-box;
-    }
-    html, body {
       margin: 0;
       padding: 0;
-      min-height: 100%;
-      background-color: #111;
-      color: #eee;
-      font-family: "Noto Sans", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      line-height: 1.8;
     }
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 1px solid #444;
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      text-shadow: 1px 1px 3px #000;
-    }
-    header p {
-      font-size: 1.1rem;
-      color: #ccc;
-    }
-    .candle-container {
+    body {
+      min-height: 100vh;
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 25px;
-      margin: 2rem 1rem;
+      align-items: center;
+      background: linear-gradient(135deg, #eef2f7 0%, #dbe4ee 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 20px;
     }
-    .candle {
-      position: relative;
-      width: 20px;
-      height: 60px;
-      background: #eee;
-      border-radius: 5px;
-      animation: candle-move 2s ease-in-out infinite alternate;
-    }
-    .flame {
-      position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12px;
-      height: 20px;
-      background: radial-gradient(ellipse at center, #ff0 0%, #f90 100%);
-      border-radius: 50%;
-      animation: flicker 0.8s infinite alternate ease-in-out;
-      opacity: 0.9;
-    }
-    @keyframes candle-move {
-      0% { transform: rotate(-1deg) translateY(0); }
-      100% { transform: rotate(1deg) translateY(-2px); }
-    }
-    @keyframes flicker {
-      0% { transform: translateX(-50%) scaleY(1); opacity: 1; }
-      100% { transform: translateX(-48%) scaleY(1.15); opacity: 0.7; }
-    }
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-    article {
-      margin-bottom: 2rem;
-      border-left: 4px solid #555;
-      padding-left: 1rem;
-    }
-    article h2 {
-      font-size: 1.5rem;
-      color: #ddd;
-    }
-    article p {
-      color: #ccc;
-    }
-    footer {
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      padding: 36px 30px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
       text-align: center;
-      padding: 1rem;
-      border-top: 1px solid #444;
-      color: #777;
-      font-size: 0.9rem;
     }
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 2rem;
-      }
-      article h2 {
-        font-size: 1.3rem;
-      }
+    .tag {
+      display: inline-block;
+      padding: 5px 14px;
+      background: #e8f4ff;
+      color: #0070f3;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+    .tip-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 16px;
+    }
+    .tip-content {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      min-height: 70px;
+      text-align: justify;
+    }
+    .refresh-btn {
+      background: #0070f3;
+      color: #ffffff;
+      border: none;
+      padding: 12px 30px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 112, 243, 0.25);
+      transition: all 0.2s ease;
+    }
+    .refresh-btn:hover {
+      background: #005bb5;
+    }
+    .refresh-btn:disabled {
+      background: #a0c7ff;
+      cursor: not-allowed;
+    }
+    .status {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #999;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Prayers for World Peace</h1>
-    <p>United in hope, we honor the departed and pray for a future without war.</p>
-  </header>
 
-  <div class="candle-container">
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
-    <div class="candle"><div class="flame"></div></div>
+  <div class="card">
+    <span class="tag" id="tag">生活贴士</span>
+    <h2 class="tip-title" id="title">今日妙招</h2>
+    <p class="tip-content" id="content">正在获取最新妙招...</p>
+    <button class="refresh-btn" id="btn" onclick="fetchTip()">换一个妙招</button>
+    <div class="status" id="status">点击按钮或按 F5 刷新</div>
   </div>
 
-  <main>
-    <article>
-      <h2>A World Without Conflict</h2>
-      <p>Every day, countless people suffer from war. We pray for a world guided by dialogue and reason instead of violence and strife.</p>
-    </article>
+  <script>
+    // 离线备用数据（防网络卡顿）
+    const backupTips = [
+      "切洋葱前将洋葱放进冷水里浸泡5分钟或冰箱冷冻10分钟，切的时候就不会刺激眼睛流泪。",
+      "衣服刚沾上油污千万不要先沾水，取少许洗洁精直接涂抹干搓1分钟，再冲水清洗即可恢复如新。",
+      "撕掉餐具或物品上的顽固胶标，涂上一层风油精或食用油静置2分钟，胶质软化后一擦即净。",
+      "微波炉有异味油污，放半碗水加入两勺白醋或柠檬片高火转3分钟，蒸汽熏软油污后擦拭干净如新。",
+      "水龙头表面水垢，用厨房纸巾浸透白醋包敷15分钟，取下后用清水一冲立刻光亮照人。"
+    ];
 
-    <article>
-      <h2>Honoring the Departed</h2>
-      <p>War leaves deep wounds. Let us light a candle in memory of those who lost their lives.</p>
-    </article>
+    async function fetchTip() {
+      const btn = document.getElementById('btn');
+      const contentEl = document.getElementById('content');
+      const statusEl = document.getElementById('status');
 
-    <article>
-      <h2>Hope Belongs to the Children</h2>
-      <p>Children are the hope of the future. May they grow up in peace and safety, far from the fears of war.</p>
-    </article>
+      btn.disabled = true;
+      contentEl.innerText = "正在加载中...";
 
-    <article>
-      <h2>The Power of Prayer</h2>
-      <p>Every act of kindness and every sincere blessing can carry the power of peace.</p>
-    </article>
+      try {
+        // 免 Key 免费国内接口（加时间戳防缓存）
+        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}`);
+        if (!res.ok) throw new Error("网络错误");
+        
+        const data = await res.json();
+        
+        // 读取接口返回内容
+        if (data.success && data.data) {
+          contentEl.innerText = data.data.content || data.data;
+          statusEl.innerText = "数据已更新（在线接口）";
+        } else {
+          throw new Error("数据格式异常");
+        }
+      } catch (e) {
+        // 请求受阻时自动切回本地随机妙招
+        const randomItem = backupTips[Math.floor(Math.random() * backupTips.length)];
+        contentEl.innerText = randomItem;
+        statusEl.innerText = "网络波动，已展示内置实用妙招";
+      } finally {
+        btn.disabled = false;
+      }
+    }
 
-    <article>
-      <h2>Brotherhood Among Nations</h2>
-      <p>Every language, culture, and tradition deserves respect. Peace is born from understanding, respect, and unity.</p>
-    </article>
+    // 页面初次进入或刷新时自动拉取
+    window.onload = fetchTip;
+  </script>
 
-    <article>
-      <h2>The Power of Silence</h2>
-      <p>Sometimes, silence speaks louder than noise. In quiet, we draw closer to conscience and peace.</p>
-    </article>
-
-    <article>
-      <h2>Light in the Darkness</h2>
-      <p>Even a single ray of light can brighten the night. Every peaceful act is a beacon of hope for the world.</p>
-    </article>
-
-    <article>
-      <h2>Our Shared Responsibility</h2>
-      <p>Peace is not just a dream—it is our shared responsibility. May we guard it with love and action.</p>
-    </article>
-
-    <article>
-      <h2>Rebuilding with Love</h2>
-      <p>Love is the balm for the scars of war. May ruined homes blossom again with vitality.</p>
-    </article>
-
-    <article>
-      <h2>Dialogue Instead of Gunfire</h2>
-      <p>May words replace weapons and reason overcome hatred. Dialogue is the bridge to peace.</p>
-    </article>
-
-    <article>
-      <h2>Memory as a Bridge</h2>
-      <p>We remember the past not to prolong pain, but to ensure it is never repeated.</p>
-    </article>
-
-    <article>
-      <h2>Justice and Forgiveness</h2>
-      <p>True peace requires both justice and forgiveness. Reconciliation is found through truth.</p>
-    </article>
-
-    <article>
-      <h2>Lighting a Candle for Every Life</h2>
-      <p>Every lost life deserves remembrance. May candlelight illuminate their names, dreams, and unfinished journeys.</p>
-    </article>
-  </main>
-
-  <footer>
-    &copy; 2025 Prayers for World Peace. All rights reserved.
-  </footer>
 </body>
 </html>
