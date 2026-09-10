@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>生活小妙招</title>
   <style>
     * {
@@ -10,129 +10,152 @@
       margin: 0;
       padding: 0;
     }
+
     body {
-      min-height: 100vh;
+      background-color: #f2f2f2;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #333333;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 顶部绿色导航栏 */
+    .header {
+      background-color: #2ba245;
+      height: 64px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #eef2f7 0%, #dbe4ee 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-      padding: 20px;
+      justify-content: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 480px;
-      padding: 36px 30px;
-      border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-      text-align: center;
-    }
-    .tag {
-      display: inline-block;
-      padding: 5px 14px;
-      background: #e8f4ff;
-      color: #0070f3;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 20px;
-      margin-bottom: 22px;
-    }
-    .tip-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #222;
-      margin-bottom: 16px;
-    }
-    .tip-content {
-      font-size: 16px;
-      color: #555;
-      line-height: 1.8;
-      margin-bottom: 30px;
-      min-height: 70px;
-      text-align: justify;
-    }
-    .refresh-btn {
-      background: #0070f3;
+
+    .header-title {
       color: #ffffff;
-      border: none;
-      padding: 12px 30px;
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0, 112, 243, 0.25);
-      transition: all 0.2s ease;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 1px;
     }
-    .refresh-btn:hover {
-      background: #005bb5;
+
+    /* 列表内容区 */
+    .list-container {
+      padding: 16px 14px;
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .refresh-btn:disabled {
-      background: #a0c7ff;
-      cursor: not-allowed;
+
+    /* 白色圆角卡片 */
+    .tip-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 18px 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
-    .status {
-      margin-top: 16px;
-      font-size: 12px;
-      color: #999;
+
+    .tip-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #222222;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .tip-desc {
+      font-size: 14px;
+      color: #666666;
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <span class="tag" id="tag">生活贴士</span>
-    <h2 class="tip-title" id="title">今日妙招</h2>
-    <p class="tip-content" id="content">正在获取最新妙招...</p>
-    <button class="refresh-btn" id="btn" onclick="fetchTip()">换一个妙招</button>
-    <div class="status" id="status">点击按钮或按 F5 刷新</div>
-  </div>
+  <!-- 顶部栏 -->
+  <header class="header">
+    <h1 class="header-title">生活小妙招</h1>
+  </header>
+
+  <!-- 妙招卡片列表 -->
+  <main class="list-container" id="tip-list"></main>
 
   <script>
-    // 离线备用数据（防网络卡顿）
-    const backupTips = [
-      "切洋葱前将洋葱放进冷水里浸泡5分钟或冰箱冷冻10分钟，切的时候就不会刺激眼睛流泪。",
-      "衣服刚沾上油污千万不要先沾水，取少许洗洁精直接涂抹干搓1分钟，再冲水清洗即可恢复如新。",
-      "撕掉餐具或物品上的顽固胶标，涂上一层风油精或食用油静置2分钟，胶质软化后一擦即净。",
-      "微波炉有异味油污，放半碗水加入两勺白醋或柠檬片高火转3分钟，蒸汽熏软油污后擦拭干净如新。",
-      "水龙头表面水垢，用厨房纸巾浸透白醋包敷15分钟，取下后用清水一冲立刻光亮照人。"
+    // 离线/网络波动兜底题库
+    const fallbackPool = [
+      { title: "手机充电更快的小妙招", desc: "打开飞行模式再充电，可以显著提升充电速度。" },
+      { title: "马桶黄渍清除法", desc: "倒入小苏打+白醋，静置10分钟后刷洗即可。" },
+      { title: "厨房油烟味太重？", desc: "煮一锅橘子皮水，有效去除异味。" },
+      { title: "电脑键盘清洁妙招", desc: "用胶带或刷子沾灰，效果极好。" },
+      { title: "切洋葱不流泪", desc: "先放冰箱冷藏10分钟再切，不刺激眼。" },
+      { title: "衣服静电太严重？", desc: "晾衣时在水里加几滴白醋或用衣物柔顺剂。" },
+      { title: "毛巾发硬清洗法", desc: "水里加入食用盐和白醋浸泡10分钟，毛巾恢复蓬松。" },
+      { title: "撕掉顽固标签不留胶", desc: "涂抹风油精或护手霜静置2分钟，用湿巾轻松擦除。" },
+      { title: "水龙头水垢清洁", desc: "纸巾浸透白醋湿敷15分钟，清水冲洗光洁照人。" }
     ];
 
-    async function fetchTip() {
-      const btn = document.getElementById('btn');
-      const contentEl = document.getElementById('content');
-      const statusEl = document.getElementById('status');
-
-      btn.disabled = true;
-      contentEl.innerText = "正在加载中...";
-
+    // 单次调用国内免 Key 免费接口
+    async function fetchSingleApiTip(index) {
       try {
-        // 免 Key 免费国内接口（加时间戳防缓存）
-        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}`);
-        if (!res.ok) throw new Error("网络错误");
-        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2秒超时保护
+
+        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}_${index}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error();
         const data = await res.json();
-        
-        // 读取接口返回内容
+
         if (data.success && data.data) {
-          contentEl.innerText = data.data.content || data.data;
-          statusEl.innerText = "数据已更新（在线接口）";
-        } else {
-          throw new Error("数据格式异常");
+          const content = data.data.content || data.data;
+          // 接口只返回一句完整内容时，提取前十几个字作为标题
+          const splitPoint = content.indexOf('，');
+          const title = (splitPoint > 3 && splitPoint < 16) ? content.slice(0, splitPoint) : "生活实用小贴士";
+          return { title, desc: content };
         }
+        throw new Error();
       } catch (e) {
-        // 请求受阻时自动切回本地随机妙招
-        const randomItem = backupTips[Math.floor(Math.random() * backupTips.length)];
-        contentEl.innerText = randomItem;
-        statusEl.innerText = "网络波动，已展示内置实用妙招";
-      } finally {
-        btn.disabled = false;
+        return null;
       }
     }
 
-    // 页面初次进入或刷新时自动拉取
-    window.onload = fetchTip;
-  </script>
+    async function loadTips() {
+      const container = document.getElementById("tip-list");
 
+      // 先快速打乱兜底数据展示骨架，避免空白等待
+      let list = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, 6);
+      render(list);
+
+      // 并发请求 6 条接口数据
+      const results = await Promise.all([0, 1, 2, 3, 4, 5].map(i => fetchSingleApiTip(i)));
+      
+      // 成功获取的替换进去，失败的保留随机兜底
+      let hasApiSuccess = false;
+      results.forEach((item, idx) => {
+        if (item && item.desc) {
+          list[idx] = item;
+          hasApiSuccess = true;
+        }
+      });
+
+      if (hasApiSuccess) {
+        render(list);
+      }
+    }
+
+    function render(data) {
+      const container = document.getElementById("tip-list");
+      container.innerHTML = data.map(item => `
+        <article class="tip-card">
+          <h2 class="tip-title">${item.title}</h2>
+          <p class="tip-desc">${item.desc}</p>
+        </article>
+      `).join('');
+    }
+
+    window.onload = loadTips;
+  </script>
 </body>
 </html>
