@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>生活小妙招</title>
   <style>
     * {
@@ -15,7 +15,7 @@
       background-color: #f2f2f2;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       color: #333333;
-      -webkit-tap-highlight-color: transparent;
+      min-height: 100vh;
     }
 
     /* 顶部绿色导航栏 */
@@ -28,6 +28,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
     }
 
     .header-title {
@@ -37,36 +38,71 @@
       letter-spacing: 1px;
     }
 
-    /* 列表内容区 */
-    .list-container {
-      padding: 16px 14px;
-      max-width: 600px;
+    /* 响应式主体容器 */
+    .main-wrapper {
+      max-width: 1200px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      padding: 20px 16px;
+    }
+
+    /* 手机端默认单列 */
+    .tip-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    /* 平板端 2 列 */
+    @media (min-width: 640px) {
+      .tip-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    /* PC 电脑宽屏端 3 列 */
+    @media (min-width: 1024px) {
+      .main-wrapper {
+        padding: 30px 24px;
+      }
+      .tip-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
     }
 
     /* 白色圆角卡片 */
     .tip-card {
       background: #ffffff;
       border-radius: 12px;
-      padding: 18px 16px;
+      padding: 22px 20px;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* PC 端悬浮微动效 */
+    @media (hover: hover) {
+      .tip-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
     }
 
     .tip-title {
       font-size: 17px;
       font-weight: 700;
       color: #222222;
-      margin-bottom: 8px;
-      line-height: 1.35;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
 
     .tip-desc {
       font-size: 14px;
       color: #666666;
-      line-height: 1.5;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -77,11 +113,13 @@
     <h1 class="header-title">生活小妙招</h1>
   </header>
 
-  <!-- 妙招卡片列表 -->
-  <main class="list-container" id="tip-list"></main>
+  <!-- 内容区 -->
+  <main class="main-wrapper">
+    <div class="tip-grid" id="tip-list"></div>
+  </main>
 
   <script>
-    // 离线/网络波动兜底题库
+    // 基础妙招备用库
     const fallbackPool = [
       { title: "手机充电更快的小妙招", desc: "打开飞行模式再充电，可以显著提升充电速度。" },
       { title: "马桶黄渍清除法", desc: "倒入小苏打+白醋，静置10分钟后刷洗即可。" },
@@ -91,56 +129,57 @@
       { title: "衣服静电太严重？", desc: "晾衣时在水里加几滴白醋或用衣物柔顺剂。" },
       { title: "毛巾发硬清洗法", desc: "水里加入食用盐和白醋浸泡10分钟，毛巾恢复蓬松。" },
       { title: "撕掉顽固标签不留胶", desc: "涂抹风油精或护手霜静置2分钟，用湿巾轻松擦除。" },
-      { title: "水龙头水垢清洁", desc: "纸巾浸透白醋湿敷15分钟，清水冲洗光洁照人。" }
+      { title: "水龙头水垢清洁", desc: "纸巾浸透白醋湿敷15分钟，清水冲洗光洁照人。" },
+      { title: "香蕉防黑保鲜技巧", desc: "用保鲜膜紧紧裹住香蕉根部的果柄，可有效减缓变黑腐败。" },
+      { title: "去除衣物火锅油渍", desc: "干衣状态下挤少许洗洁精搓洗，充分乳化后再浸水洗涤。" },
+      { title: "微波炉去味去油污", desc: "放半碗水加入柠檬片微波3分钟，蒸汽软化后抹布一擦即净。" }
     ];
 
-    // 单次调用国内免 Key 免费接口
-    async function fetchSingleApiTip(index) {
+    // 单条免 Key 接口请求
+    async function fetchTipItem(idx) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2秒超时保护
+        const timer = setTimeout(() => controller.abort(), 2200);
 
-        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}_${index}`, {
+        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}_${idx}`, {
           signal: controller.signal
         });
-        clearTimeout(timeoutId);
+        clearTimeout(timer);
 
         if (!res.ok) throw new Error();
         const data = await res.json();
 
         if (data.success && data.data) {
           const content = data.data.content || data.data;
-          // 接口只返回一句完整内容时，提取前十几个字作为标题
-          const splitPoint = content.indexOf('，');
-          const title = (splitPoint > 3 && splitPoint < 16) ? content.slice(0, splitPoint) : "生活实用小贴士";
+          const comma = content.indexOf('，');
+          const title = (comma > 3 && comma < 16) ? content.slice(0, comma) : "生活实用妙招";
           return { title, desc: content };
         }
-        throw new Error();
-      } catch (e) {
-        return null;
-      }
+      } catch (e) {}
+      return null;
     }
 
-    async function loadTips() {
-      const container = document.getElementById("tip-list");
+    async function initPage() {
+      // 电脑端展现 9 条，手机端如果单列展示也显得充实
+      const displayCount = 9;
 
-      // 先快速打乱兜底数据展示骨架，避免空白等待
-      let list = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, 6);
+      // 1. 优先随机打乱内置库，秒出首屏
+      let list = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, displayCount);
       render(list);
 
-      // 并发请求 6 条接口数据
-      const results = await Promise.all([0, 1, 2, 3, 4, 5].map(i => fetchSingleApiTip(i)));
-      
-      // 成功获取的替换进去，失败的保留随机兜底
-      let hasApiSuccess = false;
-      results.forEach((item, idx) => {
+      // 2. 并发向免费云端接口拉取新内容替换
+      const tasks = Array.from({ length: displayCount }, (_, i) => fetchTipItem(i));
+      const results = await Promise.all(tasks);
+
+      let updated = false;
+      results.forEach((item, index) => {
         if (item && item.desc) {
-          list[idx] = item;
-          hasApiSuccess = true;
+          list[index] = item;
+          updated = true;
         }
       });
 
-      if (hasApiSuccess) {
+      if (updated) {
         render(list);
       }
     }
@@ -155,7 +194,7 @@
       `).join('');
     }
 
-    window.onload = loadTips;
+    window.onload = initPage;
   </script>
 </body>
 </html>
