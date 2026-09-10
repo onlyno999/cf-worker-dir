@@ -20,7 +20,7 @@
       flex-direction: column;
     }
 
-    /* 顶部绿色导航栏：全宽贯穿 */
+    /* 顶部导航 */
     .header {
       background-color: #2ba245;
       height: 64px;
@@ -41,15 +41,23 @@
       letter-spacing: 1px;
     }
 
-    /* 全屏自适应内容容器：无 max-width 限制，撑满整个视口 */
+    /* 状态提示条（直观反馈接口调用状态） */
+    .status-bar {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      padding: 6px 0;
+      background: #e9ecef;
+      transition: all 0.3s;
+    }
+
+    /* 全屏网格自适应 */
     .main-wrapper {
       width: 100%;
       padding: 20px;
       flex: 1;
     }
 
-    /* 动态全屏网格布局：
-       卡片最小宽度 320px，超出则自动均分整屏宽度并增加列数（3列、4列、5列自由拉伸） */
     .tip-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -57,7 +65,6 @@
       width: 100%;
     }
 
-    /* 白色圆角卡片 */
     .tip-card {
       background: #ffffff;
       border-radius: 12px;
@@ -69,7 +76,6 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* PC 端悬浮效果 */
     @media (hover: hover) {
       .tip-card:hover {
         transform: translateY(-3px);
@@ -91,7 +97,6 @@
       line-height: 1.6;
     }
 
-    /* 移动端间距微调 */
     @media (max-width: 480px) {
       .main-wrapper {
         padding: 14px;
@@ -108,18 +113,19 @@
 </head>
 <body>
 
-  <!-- 顶部导航 -->
   <header class="header">
     <h1 class="header-title">生活小妙招</h1>
   </header>
 
-  <!-- 全屏网格区 -->
+  <!-- 接口状态条：绿色代表云端成功，灰色代表本地库兜底 -->
+  <div class="status-bar" id="status-bar">正在连接云端生活妙招接口...</div>
+
   <main class="main-wrapper">
     <div class="tip-grid" id="tip-list"></div>
   </main>
 
   <script>
-    // 基础备用题库
+    // 基础本地备用题库（保证秒开防空屏）
     const fallbackPool = [
       { title: "手机充电更快的小妙招", desc: "打开飞行模式再充电，可以显著提升充电速度。" },
       { title: "马桶黄渍清除法", desc: "倒入小苏打+白醋，静置10分钟后刷洗即可。" },
@@ -132,64 +138,94 @@
       { title: "水龙头水垢光亮如新", desc: "纸巾浸透白醋湿敷15分钟，清水一冲立刻光洁照人。" },
       { title: "香蕉防黑保鲜技巧", desc: "用保鲜膜紧紧裹住香蕉根部的果柄，可有效减缓变黑腐败。" },
       { title: "衣服沾上火锅油渍？", desc: "干衣服直接涂抹几滴洗洁精干搓，充分乳化油脂后再加水漂洗。" },
-      { title: "微波炉快速除味除油", desc: "碗中盛半碗水加入柠檬片微波3分钟，趁蒸汽一擦即净。" },
-      { title: "鞋子除臭小技巧", desc: "睡前将干燥的茶包或苏打粉包放进鞋内，能有效吸附潮气异味。" },
-      { title: "剪刀变钝恢复锋利", desc: "拿铝箔纸反复折叠几层，用钝剪刀剪几下，剪刀即可恢复锋利。" },
-      { title: "快速去除杯子茶垢", desc: "挤少许牙膏在抹布或海绵上，轻轻擦拭杯壁，顽固茶渍一擦即净。" }
+      { title: "微波炉快速除味除油", desc: "碗中盛半碗水加入柠檬片微波3分钟，趁蒸汽一擦即净。" }
     ];
 
-    // 单条调用国内免费接口
-    async function fetchTipItem(idx) {
+    // 解析文本内容自动生成合适标题
+    function formatTipItem(text) {
+      if (!text) return null;
+      let cleanText = text.replace(/^[0-9一二三四五六七八九十]+[、.\s]/, '').trim();
+      
+      const punctIdx = cleanText.search(/[,，:：。!！?？]/);
+      let title = "生活小窍门";
+      let desc = cleanText;
+
+      if (punctIdx >= 3 && punctIdx <= 14) {
+        title = cleanText.slice(0, punctIdx);
+        desc = cleanText.slice(punctIdx + 1).trim();
+      } else if (cleanText.length > 20) {
+        title = cleanText.slice(0, 10) + "...";
+      }
+
+      return { title, desc: desc || cleanText };
+    }
+
+    // 免费接口方案（主接口 + 备选接口）
+    async function fetchFromApi() {
+      // 方案 1: 国内韩小韩常用接口
       try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 2000);
+        const url = `https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const json = await res.json();
+          const content = json.data?.content || json.data;
+          if (content) return formatTipItem(content);
+        }
+      } catch (e) {
+        // 静默继续尝试备用源
+      }
 
-        const res = await fetch(`https://api.vvhan.com/api/ian/special?type=json&t=${Date.now()}_${idx}`, {
-          signal: controller.signal
-        });
-        clearTimeout(timer);
-
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-
-        if (data.success && data.data) {
-          const content = data.data.content || data.data;
-          const comma = content.indexOf('，');
-          const title = (comma > 3 && comma < 16) ? content.slice(0, comma) : "生活实用小贴士";
-          return { title, desc: content };
+      // 方案 2: 小歪公共常识接口
+      try {
+        const res2 = await fetch(`https://api.uomg.com/api/rand.qinghua?format=json`);
+        if (res2.ok) {
+          const json2 = await res2.json();
+          if (json2.content) return formatTipItem(json2.content);
         }
       } catch (e) {}
+
       return null;
     }
 
-    async function init() {
-      // 宽屏电脑端默认渲染 12 条，填满大显示器
-      const count = window.innerWidth > 1200 ? 12 : 8;
+    async function loadData() {
+      const statusBar = document.getElementById("status-bar");
+      const isWide = window.innerWidth > 1024;
+      const count = isWide ? 9 : 6;
 
-      // 1. 本地库随机打乱优先首屏渲染，保证秒开
-      let list = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, count);
-      render(list);
+      // 1. 先用本地题库打乱展示，秒出首屏
+      let currentList = [...fallbackPool].sort(() => Math.random() - 0.5).slice(0, count);
+      render(currentList);
 
-      // 2. 并发拉取免费接口
-      const tasks = Array.from({ length: count }, (_, i) => fetchTipItem(i));
-      const results = await Promise.all(tasks);
+      // 如果当前是 file:// 协议本地运行，给予明确提示
+      if (window.location.protocol === 'file:') {
+        statusBar.innerText = "提示：当前是本地直接双击打开 (file://)，浏览器会拦截跨域请求。上传到服务器/静态托管后即可正常请求云端。";
+        statusBar.style.color = "#d97706";
+        return;
+      }
 
-      let hasUpdate = false;
-      results.forEach((item, index) => {
-        if (item && item.desc) {
-          list[index] = item;
-          hasUpdate = true;
+      // 2. 依次请求 3 条最新接口数据填充到卡片头部
+      let successCount = 0;
+      for (let i = 0; i < Math.min(count, 3); i++) {
+        const apiItem = await fetchFromApi();
+        if (apiItem) {
+          currentList[i] = apiItem;
+          successCount++;
         }
-      });
+      }
 
-      if (hasUpdate) {
-        render(list);
+      if (successCount > 0) {
+        render(currentList);
+        statusBar.innerText = `● 云端接口已连通：已动态更新 ${successCount} 条实时妙招`;
+        statusBar.style.color = "#16a34a";
+      } else {
+        statusBar.innerText = "● 当前使用本地随机题库（云端接口暂时休眠，刷新重试）";
+        statusBar.style.color = "#666666";
       }
     }
 
-    function render(data) {
+    function render(list) {
       const container = document.getElementById("tip-list");
-      container.innerHTML = data.map(item => `
+      container.innerHTML = list.map(item => `
         <article class="tip-card">
           <h2 class="tip-title">${item.title}</h2>
           <p class="tip-desc">${item.desc}</p>
@@ -197,7 +233,7 @@
       `).join('');
     }
 
-    window.onload = init;
+    window.onload = loadData;
   </script>
 </body>
 </html>
