@@ -104,7 +104,7 @@ async function main() {
   const dayIndex = Math.floor(Date.now() / 86400000);
   const offset = lib.length ? dayIndex % lib.length : 0;
   const rotated = lib.slice(offset).concat(lib.slice(0, offset));
-  const display = rotated.slice(0, 37);
+  const display = rotated.slice(0, 38);
   const daily = rotated[0] || { t: '', x: '' };
   const rank = rotated.slice(1, 11);
 
