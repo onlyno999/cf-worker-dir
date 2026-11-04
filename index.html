@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>生活小妙招</title>
+  <title>生活小妙招 - 每天学一招，日子更轻松</title>
+  <meta name="description" content="生活小妙招：家居清洁、厨房烹饪、衣物护理、食品保鲜、健康日常、收纳出行，实用生活技巧大全，每天更新。">
   <style>
     * {
       box-sizing: border-box;
@@ -23,15 +24,21 @@
     /* 顶部导航 */
     .header {
       background-color: #2ba245;
-      height: 64px;
       width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       position: sticky;
       top: 0;
       z-index: 100;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .header-title {
@@ -41,10 +48,119 @@
       letter-spacing: 1px;
     }
 
-    /* PC 端自适应全屏网格 */
+    .header-nav a {
+      color: rgba(255, 255, 255, 0.92);
+      text-decoration: none;
+      font-size: 15px;
+      margin-left: 26px;
+    }
+
+    .header-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .header-nav { display: none; }
+      .header-inner { justify-content: center; }
+    }
+
+    /* 主横幅 */
+    .banner {
+      background: linear-gradient(135deg, #2ba245 0%, #57b84c 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 34px 20px 30px;
+    }
+
+    .banner h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .banner p {
+      font-size: 15px;
+      opacity: 0.92;
+    }
+
+    /* 今日推荐 */
+    .daily {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .daily-card {
+      background: #fffbe9;
+      border: 1px solid #f0dfa0;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .daily-badge {
+      background: #f5a623;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .daily-card h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #222;
+    }
+
+    .daily-card p {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.75;
+    }
+
+    /* 分类筛选 */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 22px auto 0;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-btn {
+      border: 1px solid #d8d8d8;
+      background: #ffffff;
+      color: #444;
+      font-size: 14.5px;
+      padding: 7px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover { border-color: #2ba245; color: #2ba245; }
+
+    .filter-btn.active {
+      background: #2ba245;
+      border-color: #2ba245;
+      color: #ffffff;
+    }
+
+    /* 卡片网格 */
     .main-wrapper {
       width: 100%;
-      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 20px 8px;
       flex: 1;
     }
 
@@ -73,166 +189,424 @@
       }
     }
 
+    .tip-tag {
+      align-self: flex-start;
+      font-size: 12px;
+      color: #2ba245;
+      background: #e8f6ec;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+
     .tip-title {
       font-size: 17px;
       font-weight: 700;
       color: #222222;
       margin-bottom: 8px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
-    .tip-desc {
-      font-size: 14px;
-      color: #666666;
-      line-height: 1.6;
+    .tip-text {
+      font-size: 14.5px;
+      color: #555555;
+      line-height: 1.8;
     }
 
-    /* 底部提示文字 */
+    /* 热门排行 */
+    .rank-section {
+      max-width: 1200px;
+      margin: 10px auto 0;
+      padding: 0 20px 6px;
+      width: 100%;
+    }
+
+    .rank-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .rank-box h2 {
+      font-size: 19px;
+      margin-bottom: 14px;
+      color: #222;
+    }
+
+    .rank-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 8px 28px;
+    }
+
+    .rank-list li {
+      font-size: 15px;
+      color: #444;
+      padding: 7px 0;
+      border-bottom: 1px dashed #eeeeee;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .rank-num {
+      color: #f5a623;
+      font-weight: 700;
+      font-style: italic;
+      min-width: 18px;
+    }
+
+    /* 关于 */
+    .about-section {
+      max-width: 1200px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .about-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .about-box h2 { font-size: 19px; margin-bottom: 10px; color: #222; }
+
+    .about-box p {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.85;
+    }
+
+    /* 页脚 */
     .footer {
       text-align: center;
-      padding: 24px 16px 32px;
-      font-size: 14px;
-      color: #888888;
-      letter-spacing: 0.5px;
-    }
-
-    @media (max-width: 480px) {
-      .main-wrapper {
-        padding: 14px;
-      }
-      .tip-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      .tip-card {
-        padding: 16px;
-      }
-      .footer {
-        padding: 18px 14px 28px;
-        font-size: 13px;
-      }
+      color: #999999;
+      font-size: 13.5px;
+      padding: 30px 20px 36px;
+      line-height: 2;
     }
   </style>
 </head>
 <body>
 
   <header class="header">
-    <h1 class="header-title">生活小妙招</h1>
+    <div class="header-inner">
+      <div class="header-title">生活小妙招</div>
+      <nav class="header-nav">
+        <a href="#tips">妙招大全</a>
+        <a href="#rank">热门排行</a>
+        <a href="#about">关于本站</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="main-wrapper">
-    <div class="tip-grid" id="tip-list"></div>
+  <section class="banner">
+    <h1>每天学一招，日子更轻松</h1>
+    <p>家居、厨房、衣物、保鲜、健康、收纳——把麻烦事变简单的小窍门，都在这里。</p>
+  </section>
+
+  <section class="daily">
+    <div class="daily-card">
+      <span class="daily-badge">今日推荐</span>
+      <div>
+        <h2>切洋葱不流泪：先冷藏再下刀</h2>
+        <p>洋葱切之前放进冰箱冷藏 15 分钟，或者在流水下边冲边切，催泪的挥发物会大大减少。案板旁边点一支蜡烛也有帮助，火焰会把上升的刺激气体烧掉一部分。经常做饭的人还可以备一副护目泳镜，简单粗暴但最管用。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-cat="all">全部</button>
+    <button class="filter-btn" data-cat="home">家居清洁</button>
+    <button class="filter-btn" data-cat="kitchen">厨房妙招</button>
+    <button class="filter-btn" data-cat="clothes">衣物护理</button>
+    <button class="filter-btn" data-cat="food">食品保鲜</button>
+    <button class="filter-btn" data-cat="health">健康日常</button>
+    <button class="filter-btn" data-cat="storage">收纳出行</button>
+  </div>
+
+  <main class="main-wrapper" id="tips">
+    <div class="tip-grid" id="tipGrid">
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">白色帆布鞋边沿发黄妙招</h3>
+        <p class="tip-text">刷洗干净后，裹满数层白色卫生纸放在阴凉通风处风干，纸巾能吸走所有泛黄沉淀，鞋面洁净如新。切记不要暴晒，紫外线会让橡胶边加速氧化变黄；急着穿可以用吹风机冷风档慢慢吹干。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">去除冰箱内部顽固异味</h3>
+        <p class="tip-text">放一卷未开封的卷纸或半盒打开的小苏打在冷藏室，吸附异味可持续一个月。橘子皮、柚子皮晒干后放进去也有同样效果；异味特别重时，先用白醋兑水把内壁擦一遍，再放吸附物，基本两天就清爽了。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">保温杯内胆深层茶垢水垢妙招</h3>
+        <p class="tip-text">丢入一小把生大米和半勺食用盐，加小半杯温水盖紧用力摇晃 1 分钟，摩擦力能彻底清除死角茶垢。顽固水垢则倒入白醋浸泡半小时再冲洗；杯盖的密封圈记得拆下来单独刷，异味多半藏在那里面。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">镜子防雾洗澡不模糊</h3>
+        <p class="tip-text">洗澡前用干燥的肥皂在镜面上薄薄涂抹一层，再用干抹布擦亮，蒸汽不易结雾。用洗洁精兑水喷一遍擦干也有类似效果，一次处理能管三四天；家里有车蜡的话薄薄打一层，防雾时间更长。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">真丝衣物失去光泽变硬妙招</h3>
+        <p class="tip-text">漂洗最后一遍水中加入半勺食用白醋浸泡 3 分钟，弱酸性环境保护蛋白质纤维柔软飘逸。真丝切忌用碱性洗衣液和暴晒，阴干到八成时用蒸汽熨斗低温熨烫，光泽感就能回来；收纳时不要喷香水，会留下黄斑。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">塑料保鲜盒顽固红油异味妙招</h3>
+        <p class="tip-text">放入一把撕碎的菠菜叶或两片柠檬，加温水盖紧晃晃静置半小时，叶绿素与果酸能迅速吸附脂溶性异味。红油渍先用面粉或淀粉干搓一遍再洗，油污会成团脱落；洗净后倒扣晾干再盖盖，避免闷出霉味。</p>
+      </article>
+
+      <article class="tip-card" data-cat="storage">
+        <span class="tip-tag">收纳出行</span>
+        <h3 class="tip-title">拉链卡顿拉动不顺畅妙招</h3>
+        <p class="tip-text">用铅笔石墨芯或蜡烛在拉链齿正反面来回涂抹几下，天然润滑成分让拉链顺滑自如。金属拉链还可以用棉签蘸一点凡士林薄涂；如果拉链头松了合不拢，用钳子轻轻夹紧拉链头尾部就能恢复咬合。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">皮鞋表面失去光泽有细纹妙招</h3>
+        <p class="tip-text">吃完香蕉后用香蕉皮内侧白膜轻擦鞋面，再用软布抛光，单宁成分能有效软化皮革并提亮。细纹明显的地方可以先涂一层护手霜静置十分钟再擦鞋油；平时收纳塞上报纸团撑形，放在通风处远离暖气。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">水龙头水垢一擦就掉</h3>
+        <p class="tip-text">厨房纸蘸白醋敷在水龙头上二十分钟，水垢软化后轻轻一擦就干净，最后用干布擦亮防再次结垢。花洒喷头堵了同样处理：拆下来泡在白醋里一晚，第二天冲水就通畅，不要用针硬捅，会把出水孔捅变形。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">地板缝隙灰尘难清理</h3>
+        <p class="tip-text">旧丝袜套在拖把头上，静电会把缝隙里的毛发灰尘一起带走；或者用宽胶带缠在手上反粘。木地板缝发黑可以用牙刷蘸小苏打糊轻轻刷，擦净后滴一滴地板蜡封住，后续不容易再藏灰。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">玻璃杯茶渍咖啡渍洗不净</h3>
+        <p class="tip-text">牙膏挤在湿海绵上擦杯壁，研磨颗粒能把渍层磨掉还不留划痕；没有牙膏时用盐粒干搓也行。杯口的一圈印记最顽固，可以用柠檬片直接来回擦，既去渍又留清香，洗完倒置控干不要擦内壁，避免掉毛絮。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">微波炉内部油污免刷洗</h3>
+        <p class="tip-text">一碗水加两片柠檬，大火加热三分钟，蒸汽会把内壁油污泡软，断电后焖五分钟再擦，一抹就掉。转盘取出来单独用洗洁精洗；加热完的那碗柠檬水别倒，趁热擦灶台，顺手把油烟机表面的浮油也带走了。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">砧板发霉有异味怎么办</h3>
+        <p class="tip-text">粗盐撒满板面，用切开的柠檬反复擦搓，盐粒去污、柠檬酸杀菌除味，冲净后竖着晾干。每周用白醋喷一遍能预防发霉；木砧板每月薄涂一层食用油保养，防止干裂。生熟砧板务必分开，肉板不要拿来切水果。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">剥蒜皮三十秒剥一头蒜</h3>
+        <p class="tip-text">大蒜放进两个扣在一起的碗里用力摇晃十几秒，蒜皮自动脱落大半；或者整头蒜微波加热十秒，皮一捏就掉。剥好的蒜瓣一次吃不完，装保鲜袋冷冻，下次剁蒜泥时冻着切反而更顺手，还不辣眼睛。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">煮饺子不粘锅不破皮</h3>
+        <p class="tip-text">水开后加一勺盐和几滴食用油再下饺子，皮不容易粘连；中途点两次凉水，肚皮鼓起就熟了。冻饺子不用解冻，冷水下锅小火慢慢升温，皮和馅同步受热，不容易煮成一锅糊。捞出后过一遍温水，摆盘不粘连。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">切辣椒手辣得受不了</h3>
+        <p class="tip-text">辣椒素是脂溶性的，用流水冲没用。先用食用油或牛奶搓手一分钟，再用洗洁精洗净，辣感基本消失；白酒、牙膏也有缓解效果。切之前在手上薄涂一层油或者戴一次性手套最省事，切完不要揉眼睛。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">新锅开锅养锅不粘底</h3>
+        <p class="tip-text">铁锅洗净烧干，均匀抹一层猪油或植物油，小火烧三分钟关火静置，重复两遍形成油膜。日常炒完菜趁热用温水刷洗，不要用洗洁精猛刷油膜；长期不用时薄涂油防锈。坚持一个月，煎蛋煎鱼都不粘。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">毛衣起球别用手揪</h3>
+        <p class="tip-text">用剃毛器或者宽胶带粘除最稳妥；应急时拿一把干净的剃须刀平贴着轻轻刮。洗的时候把毛衣翻面装进洗衣袋，水里加一点护发素，纤维顺滑了就不容易再起球。收纳时不要挂着，叠放防止拉长变形。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">白衣服领口袖口发黄</h3>
+        <p class="tip-text">洗前用洗发水或洗洁精原液涂在黄渍处揉搓五分钟，分解皮脂后再整件下水；顽固黄渍用氧系漂白剂温水浸泡。纯棉白衣可以偶尔用稀释的柠檬水煮洗提亮。彩色衣服别用含氯漂白水，会漂花。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">衣服沾上口香糖别硬撕</h3>
+        <p class="tip-text">把衣服装进塑料袋放冰箱冷冻一小时，口香糖冻硬后一掰就整块脱落；残留印迹用酒精棉球擦掉。如果是刚沾上，用冰块直接敷在污渍背面也一样。地毯、头发上沾了同理，冷冻法最安全不伤材质。</p>
+      </article>
+
+      <article class="tip-card" data-cat="clothes">
+        <span class="tip-tag">衣物护理</span>
+        <h3 class="tip-title">羽绒服洗成一坨怎么恢复</h3>
+        <p class="tip-text">阴干后把羽绒服平铺，用衣架轻轻拍打结块处，或者放进烘干机低温烘二十分钟并扔两个干净网球进去，蓬松度立马回来。机洗要用羽绒专用洗涤剂且不能脱水太狠；局部脏污尽量只擦洗领口袖口，少整洗更保暖。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">香蕉两三天就变黑</h3>
+        <p class="tip-text">用保鲜膜把香蕉根茎紧紧裹住，隔绝催熟的乙烯气体，能多放三四天；悬挂存放比平放更不容易压黑。已经太熟吃不完的香蕉去皮冷冻，打奶昔、做香蕉饼正好。香蕉不要和苹果放一起，会互相催熟。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">绿叶菜放两天就蔫了</h3>
+        <p class="tip-text">菜叶不要洗，垫一张厨房纸再装进保鲜袋，纸吸收多余水汽，冷藏能放四五天依然脆嫩。已经蔫了的菜泡进加了一勺白糖的凉水里半小时，能恢复不少水分。带根的香菜小葱可以用湿纸巾裹根竖着放杯子里养。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">切开的柠檬别浪费</h3>
+        <p class="tip-text">切面朝下扣在小碟子里，或者撒一层白糖封住切面，冷藏能放一周不干瘪。挤汁后剩的柠檬皮别扔：擦水龙头去水垢、放冰箱除味、泡水擦微波炉都好用。一次买多可以把柠檬汁冻成冰格，随用随取。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">大米生虫了怎么办</h3>
+        <p class="tip-text">把米摊开在阴凉处，虫子会自己爬走，不要暴晒会碎米。预防是关键：米桶里放几粒整颗花椒、用纱布包的大蒜瓣或者几片干橘子皮，气味驱虫。买回来的新米先冷冻 24 小时再常温存放，虫卵基本不会孵化。</p>
+      </article>
+
+      <article class="tip-card" data-cat="food">
+        <span class="tip-tag">食品保鲜</span>
+        <h3 class="tip-title">面包第二天就发硬</h3>
+        <p class="tip-text">面包袋里放一根芹菜茎或者一片苹果，水分会慢慢被面包吸收，能保持松软多一天。吃之前表面喷一点水，烤箱 150 度回烤三分钟，外脆内软像刚出炉。长期保存直接冷冻，冷藏反而老化最快。</p>
+      </article>
+
+      <article class="tip-card" data-cat="health">
+        <span class="tip-tag">健康日常</span>
+        <h3 class="tip-title">眼镜起雾看不清</h3>
+        <p class="tip-text">镜片两面薄涂一层洗洁精或肥皂液，晾干后用眼镜布轻轻擦匀（不要擦太净），表面形成亲水膜，戴口罩、吃火锅都不容易起雾。市售防雾湿巾也是同样原理。自制法效果能维持大半天，出门前处理一次足够。</p>
+      </article>
+
+      <article class="tip-card" data-cat="health">
+        <span class="tip-tag">健康日常</span>
+        <h3 class="tip-title">新鞋磨脚后跟</h3>
+        <p class="tip-text">磨脚处贴一小块医用胶布或者创可贴过渡一周；也可以用白酒浸湿毛巾敷在鞋后跟内侧十分钟，皮革变软就不磨了。鞋子本身偏紧的话，塞一团湿报纸撑一晚上会松一点。磨出的水泡不要挑破，贴水胶体敷料好得快。</p>
+      </article>
+
+      <article class="tip-card" data-cat="health">
+        <span class="tip-tag">健康日常</span>
+        <h3 class="tip-title">落枕脖子转不动</h3>
+        <p class="tip-text">热毛巾敷在疼痛一侧十五分钟，再缓慢地小幅度左右转头活动，不要猛掰。枕头高度以一拳为宜，太高太低都容易落枕；侧睡时枕头要填满肩颈空隙。两三天不缓解或者手臂发麻，要及时就医别硬扛。</p>
+      </article>
+
+      <article class="tip-card" data-cat="health">
+        <span class="tip-tag">健康日常</span>
+        <h3 class="tip-title">蚊子包痒得难受</h3>
+        <p class="tip-text">用肥皂水涂抹叮咬处，碱性中和蚁酸能快速止痒；冷敷或者贴一片冰镇的黄瓜片也有效。不要抓挠，指甲里的细菌容易让皮肤感染留印。家里常备炉甘石洗剂，摇匀后棉签点涂，孩子也能用。</p>
+      </article>
+
+      <article class="tip-card" data-cat="health">
+        <span class="tip-tag">健康日常</span>
+        <h3 class="tip-title">手机屏幕指纹油膜</h3>
+        <p class="tip-text">用眼镜布或超细纤维布干擦即可，不要用酒精频繁擦拭，会损伤疏油层；特别脏时布蘸一点点清水拧干再擦。贴膜的手机可以直接用湿巾。充电口积灰用干燥的软毛牙刷轻轻扫，不要用金属针硬掏。</p>
+      </article>
+
+      <article class="tip-card" data-cat="storage">
+        <span class="tip-tag">收纳出行</span>
+        <h3 class="tip-title">数据线耳机线总缠成一团</h3>
+        <p class="tip-text">用长尾夹夹在桌边，线头穿过夹子钢圈垂下来，随用随抽不打结；出门时把线绕在旧银行卡大小的卡片缺口上，或者塞进闲置的眼镜盒里。魔术扎带比橡皮筋耐用，不会老化粘线。充电线接口处套一小段热缩管，能防折断。</p>
+      </article>
+
+      <article class="tip-card" data-cat="storage">
+        <span class="tip-tag">收纳出行</span>
+        <h3 class="tip-title">行李箱衣服又多又皱</h3>
+        <p class="tip-text">衣服卷成卷比叠放省三成空间还不爱皱；易皱的衬衫放在最上层，中间塞一条腰带撑住领口。鞋子套上浴帽再放进箱子不脏衣物，鞋肚子里塞袜子内衣又省地儿。洗漱包外再套一个密封袋，防漏双保险。</p>
+      </article>
+
+      <article class="tip-card" data-cat="storage">
+        <span class="tip-tag">收纳出行</span>
+        <h3 class="tip-title">钥匙太多分不清哪把开哪门</h3>
+        <p class="tip-text">用不同颜色的指甲油在钥匙柄上点一个小点，或者套彩色钥匙帽，一眼就能认出。备用钥匙不要都挂在一串上，分开放。智能门锁没电时应急钥匙放在哪里，提前告诉家里人，别等锁在门外干着急。</p>
+      </article>
+
+      <article class="tip-card" data-cat="storage">
+        <span class="tip-tag">收纳出行</span>
+        <h3 class="tip-title">换季被子收纳防潮防霉</h3>
+        <p class="tip-text">收起来之前连晒两天彻底祛潮，装袋时放两包干燥剂和一片天然樟木条，不要用樟脑丸直接接触被面。真空压缩袋能省七成空间，但羽绒被、蚕丝被不要压太狠，会损伤蓬松度和保暖性，压到一半即可。</p>
+      </article>
+
+      <article class="tip-card" data-cat="home">
+        <span class="tip-tag">家居清洁</span>
+        <h3 class="tip-title">纱窗灰尘不用拆洗</h3>
+        <p class="tip-text">旧报纸用水打湿贴满纱窗，两分钟后揭下来，灰尘全被报纸带走；再用海绵蘸洗洁精水擦一遍即可。隐形纱窗用吸尘器配毛刷头吸最省事。厨房纱窗油灰重，先喷一遍油烟净静置五分钟再按上面步骤处理。</p>
+      </article>
+
+      <article class="tip-card" data-cat="kitchen">
+        <span class="tip-tag">厨房妙招</span>
+        <h3 class="tip-title">蜂蜜结晶了怎么恢复</h3>
+        <p class="tip-text">结晶是葡萄糖析出的自然现象，不是变质。把蜜罐拧紧盖子放进 40 度左右的温水里慢慢浸泡，结晶会重新溶解；不要用开水和微波炉，高温会破坏蜂蜜的活性成分。平时存放避光常温即可，不要放冰箱，低温反而加速结晶。</p>
+      </article>
+
+    </div>
   </main>
 
+  <section class="rank-section" id="rank">
+    <div class="rank-box">
+      <h2>本周热门妙招</h2>
+      <ol class="rank-list">
+        <li><span class="rank-num">1</span>微波炉内部油污免刷洗</li>
+        <li><span class="rank-num">2</span>切洋葱不流泪：先冷藏再下刀</li>
+        <li><span class="rank-num">3</span>煮饺子不粘锅不破皮</li>
+        <li><span class="rank-num">4</span>香蕉两三天就变黑</li>
+        <li><span class="rank-num">5</span>毛衣起球别用手揪</li>
+        <li><span class="rank-num">6</span>衣服沾上口香糖别硬撕</li>
+        <li><span class="rank-num">7</span>行李箱衣服又多又皱</li>
+        <li><span class="rank-num">8</span>大米生虫了怎么办</li>
+        <li><span class="rank-num">9</span>眼镜起雾看不清</li>
+        <li><span class="rank-num">10</span>水龙头水垢一擦就掉</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <div class="about-box">
+      <h2>关于本站</h2>
+      <p>「生活小妙招」是一个专注于日常实用技巧的小站，内容来自编辑团队的亲身实测和热心读者的投稿分享。我们相信，把日子过好不需要花大钱，多数难题家里现成的东西就能解决。本站每天更新一招，涵盖家居清洁、厨房烹饪、衣物护理、食品保鲜、健康日常与收纳出行六大类，所有妙招都经过实际验证才发布。如果你也有压箱底的好方法，欢迎通过页面底部的方式投稿，一经采用将署名刊登。</p>
+    </div>
+  </section>
+
   <footer class="footer">
-    每次刷新页面都会获取全新妙招合集 ✨
+    生活小妙招 · 每天学一招，日子更轻松<br>
+    © 2026 生活小妙招 版权所有
   </footer>
 
   <script>
-    // 核心精选妙招库
-    const curatedTips = [
-      { title: "手机充电更快的小妙招", desc: "打开飞行模式再充电，可以显著提升充电速度。" },
-      { title: "马桶黄渍清除法", desc: "倒入小苏打+白醋，静置10分钟后刷洗即可。" },
-      { title: "厨房油烟味太重？", desc: "煮一锅橘子皮水，有效去除异味。" },
-      { title: "电脑键盘清洁妙招", desc: "用胶带或刷子沾灰，效果极好。" },
-      { title: "切洋葱不流泪", desc: "先放冰箱冷藏10分钟再切，不刺激眼。" },
-      { title: "衣服静电太严重？", desc: "晾衣时在水里加几滴白醋或用衣物柔顺剂。" },
-      { title: "毛巾发硬清洗法", desc: "水里加入食用盐和白醋浸泡10分钟，毛巾恢复蓬松。" },
-      { title: "撕掉顽固标签不留胶", desc: "涂抹风油精或护手霜静置2分钟，用湿巾轻松擦除。" },
-      { title: "水龙头水垢清洁", desc: "纸巾浸透白醋湿敷15分钟，清水冲洗光洁照人。" },
-      { title: "香蕉防黑保鲜技巧", desc: "用保鲜膜紧紧裹住香蕉根部的果柄，可有效减缓变黑腐败。" },
-      { title: "衣服沾上火锅油渍？", desc: "干衣服直接涂抹几滴洗洁精干搓，充分乳化油脂后再加水漂洗。" },
-      { title: "微波炉快速除味除油", desc: "碗中盛半碗水加入柠檬片微波3分钟，趁蒸汽一擦即净。" },
-      { title: "快速去除杯子茶垢", desc: "挤少许牙膏在湿布或海绵上，轻轻擦拭杯壁，顽固茶垢一冲即净。" },
-      { title: "剪刀变钝恢复锋利", desc: "将废旧铝箔纸反复折叠几层，用钝剪刀剪几刀，刃口立刻恢复锋利。" },
-      { title: "鞋子潮湿与异味去除", desc: "睡前将干燥的茶包、竹炭包或小苏打纸包塞入鞋内，除湿除臭效果立竿见影。" },
-      { title: "蒸饭防止夹生饭有妙招", desc: "若米饭夹生，用筷子在饭上扎几个直通锅底的孔，洒入少许黄酒再焖煮5分钟即可熟透。" },
-      { title: "菜刀切肉不粘刀技巧", desc: "切肉或土豆片前，在刀面两侧抹上一层薄薄的食用油，切片顺畅不粘连。" },
-      { title: "快速剥大蒜不伤手", desc: "把蒜粒放入带盖密封罐或两个不锈钢碗中用力上下摇晃10秒，蒜皮自然脱落。" },
-      { title: "去除冰箱内部顽固异味", desc: "放一卷未开封的卷纸或半盒打开的小苏打在冰箱冷藏室，吸附异味可持续一个月。" },
-      { title: "衣物被圆珠笔划痕", desc: "在划痕处涂抹浓度75%以上的酒精，静置3分钟待墨水溶解后，涂肥皂正常揉洗。" },
-      { title: "镜子防雾洗澡不模糊", desc: "洗澡前用干燥的肥皂在镜面上薄薄涂抹一层，再用干抹布擦亮，蒸汽不易结雾。" },
-      { title: "地毯压痕轻松复原", desc: "在家具压出的凹痕处放一块冰块自然融化，干透后用旧牙刷轻轻梳理绒毛即可。" },
-      { title: "砂锅糊底不费力清洗", desc: "锅内倒入小苏打加水煮沸5分钟，关火浸泡20分钟，糊块会整块剥离脱落。" },
-      { title: "快速撕掉膏药不扯毛发", desc: "揭膏药前用棉签蘸取婴儿油或风油精浸润边缘，等待1分钟撕除毫无痛感。" },
-      { title: "煮鸡蛋蛋壳超好剥", desc: "冷水下锅时加一小勺食用盐或几滴白醋，煮熟后立刻捞出过凉水即可整块脱壳。" },
-      { title: "防止切开的苹果氧化", desc: "切好的苹果片浸泡在淡盐水（1碗温水加半茶匙盐）中1分钟捞出，可保持数小时不发黄。" },
-      { title: "雨伞速干不发霉", desc: "雨天撑伞回家后切勿立刻合拢倒置，应撑开放在通风处风干，防止伞骨生锈发霉。" },
-      { title: "清洗花洒内部水垢堵塞", desc: "塑料袋内装入白醋和温水（1:1），套在花洒头上用皮筋扎紧泡1小时，出水孔瞬间通畅。" },
-      { title: "去除砧板鱼腥与霉斑", desc: "砧板撒上细盐和半个柠檬反复搓擦，静置5分钟后用开水冲净，杀菌除味极佳。" },
-      { title: "快速去除衣服黏毛碎屑", desc: "手套上戴一只普通的橡胶洗碗手套，顺着衣物纹理单向抚摸，毛絮碎发瞬间聚拢。" }
-    ];
-
-    // 多维度组合词库（排列组合可自动生成 5000+ 条真实实用小妙招）
-    const generatorDB = {
-      targets: [
-        { name: "不锈钢锅具", tag: "焦黑油垢", method: "厚敷小苏打加少量温水调成糊状，静置20分钟后用百洁布刷洗", effect: "轻松还原金属光泽且不伤表面" },
-        { name: "白色帆布鞋", tag: "边沿发黄", method: "刷洗干净后，裹满数层白色卫生纸放在阴凉通风处风干", effect: "纸巾能吸走所有泛黄沉淀，鞋面白净如新" },
-        { name: "木质家具表面", tag: "轻微划痕", method: "拿一颗生核桃仁或碧根果在划痕处用力涂抹摩擦", effect: "天然坚果油脂能自然渗透填平木纹划痕" },
-        { name: "保温杯内胆", tag: "深层茶垢水垢", method: "丢入一小把生大米和半勺食用盐，加小半杯温水盖紧用力摇晃1分钟", effect: "摩擦力能彻底清除死角茶垢" },
-        { name: "浴室瓷砖缝隙", tag: "发黑霉菌斑", method: "喷洒稀释的84消毒液或白醋加双氧水，静置半小时后用废牙刷刷净", effect: "深层根除霉斑且延缓重新滋生" },
-        { name: "羽绒服局部", tag: "油渍污迹", method: "局部喷上中性洗涤剂或洗洁精，用软毛牙刷单向轻刷再用湿毛巾擦干", effect: "免去整件水洗保暖绒朵不结块" },
-        { name: "塑料保鲜盒", tag: "顽固红油异味", method: "放入一把撕碎的菠菜叶或两片柠檬，加温水盖紧摇晃静置半小时", effect: "叶绿素与果酸能迅速吸附脂溶性异味" },
-        { name: "切菜木砧板", tag: "深层异味异色", method: "表面撒粗盐用切开的柠檬均匀擦拭，开水烫洗后竖立风干", effect: "深度抑菌并自然祛除生鲜腥味" },
-        { name: "地毯表面", tag: "咖啡或红酒翻倒", method: "立刻用干纸巾吸干水分，撒厚厚一层食盐吸附残留色素再用吸尘器清理", effect: "防止色素渗入纤维深层定型" },
-        { name: "金银首饰饰品", tag: "氧化发黑失去光泽", method: "碗底铺一层铝箔纸，放入首饰撒两勺盐并注入沸水浸泡10分钟", effect: "电化学还原反应让金属瞬间光亮如新" },
-        { name: "拉链卡顿", tag: "拉动不顺畅", method: "用铅笔石墨芯或蜡烛在拉链齿正反面来回涂抹几下", effect: "天然润滑成分让拉链顺滑自如" },
-        { name: "皮鞋表面", tag: "失去光泽有细纹", method: "吃完香蕉后用香蕉皮内侧白膜轻擦鞋面，再用软布抛光", effect: "单宁成分能有效软化皮革并提亮" },
-        { name: "玻璃窗户", tag: "浮灰水痕", method: "喷上稀释白醋水后，揉皱一张旧报纸来回擦拭", effect: "报纸油墨具有抛光效果且完全不留棉絮" },
-        { name: "真丝衣物", tag: "失去光泽变硬", method: "漂洗最后一遍水中加入半勺食用白醋浸泡3分钟", effect: "弱酸性环境保护蛋白质纤维柔软飘逸" },
-        { name: "厨房水槽下水道", tag: "反味积垢", method: "先向下水道倒入半杯小苏打，随后缓缓冲入一大碗热白醋", effect: "剧烈发泡能强力冲开管壁黏附油脂与异味" }
-      ],
-      prefix: [
-        "轻松解决", "快速搞定", "教你一招搞定", "日常巧用妙招：", "老保姆私藏法：", "高效清除", "一分钟学会："
-      ]
-    };
-
-    // 组合生成器（确保每次能衍生海量数据）
-    function generateDynamicTips() {
-      const results = [];
-      generatorDB.targets.forEach(item => {
-        generatorDB.prefix.forEach(pre => {
-          results.push({
-            title: `${item.name}${item.tag}妙招`,
-            desc: `${item.method}，${item.effect}。`
+    (function () {
+      var buttons = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.tip-card');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var cat = btn.getAttribute('data-cat');
+          cards.forEach(function (card) {
+            if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
           });
         });
       });
-      return results;
-    }
-
-    // 汇集并洗牌
-    const fullMegaPool = [...curatedTips, ...generateDynamicTips()];
-
-    function getRandomTips() {
-      // 屏幕自适应展示数量：大宽屏展示 12 条，普通屏幕展示 8 条，手机单列展示 6 条
-      let count = 8;
-      if (window.innerWidth >= 1200) {
-        count = 12;
-      } else if (window.innerWidth <= 480) {
-        count = 6;
-      }
-
-      // Fisher-Yates 随机打乱
-      const poolCopy = [...fullMegaPool];
-      for (let i = poolCopy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [poolCopy[i], poolCopy[j]] = [poolCopy[j], poolCopy[i]];
-      }
-
-      const selected = poolCopy.slice(0, count);
-      const container = document.getElementById("tip-list");
-      
-      container.innerHTML = selected.map(item => `
-        <article class="tip-card">
-          <h2 class="tip-title">${item.title}</h2>
-          <p class="tip-desc">${item.desc}</p>
-        </article>
-      `).join('');
-    }
-
-    // 页面加载或刷新时瞬间完成
-    window.onload = getRandomTips;
+    })();
   </script>
+
 </body>
 </html>
