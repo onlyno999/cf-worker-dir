@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生活小妙招 - 每天学一招，日子更轻松</title>
+  <meta name="description" content="生活小妙招：家居清洁、厨房烹饪、衣物护理、食品保鲜、健康日常、收纳出行，实用生活技巧大全，每天更新。">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f2f2f2;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #333333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 顶部导航 */
+    .header {
+      background-color: #2ba245;
+      width: 100%;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-title {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .header-nav a {
+      color: rgba(255, 255, 255, 0.92);
+      text-decoration: none;
+      font-size: 15px;
+      margin-left: 26px;
+    }
+
+    .header-nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      .header-nav { display: none; }
+      .header-inner { justify-content: center; }
+    }
+
+    /* 主横幅 */
+    .banner {
+      background: linear-gradient(135deg, #2ba245 0%, #57b84c 100%);
+      color: #ffffff;
+      text-align: center;
+      padding: 34px 20px 30px;
+    }
+
+    .banner h1 {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .banner p {
+      font-size: 15px;
+      opacity: 0.92;
+    }
+
+    /* 今日推荐 */
+    .daily {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .daily-card {
+      background: #fffbe9;
+      border: 1px solid #f0dfa0;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .daily-badge {
+      background: #f5a623;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .daily-card h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #222;
+    }
+
+    .daily-card p {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.75;
+    }
+
+    /* 分类筛选 */
+    .filter-bar {
+      max-width: 1200px;
+      margin: 22px auto 0;
+      padding: 0 20px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-btn {
+      border: 1px solid #d8d8d8;
+      background: #ffffff;
+      color: #444;
+      font-size: 14.5px;
+      padding: 7px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover { border-color: #2ba245; color: #2ba245; }
+
+    .filter-btn.active {
+      background: #2ba245;
+      border-color: #2ba245;
+      color: #ffffff;
+    }
+
+    /* 卡片网格 */
+    .main-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 20px 8px;
+      flex: 1;
+    }
+
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      width: 100%;
+    }
+
+    .tip-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    @media (hover: hover) {
+      .tip-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    .tip-tag {
+      align-self: flex-start;
+      font-size: 12px;
+      color: #2ba245;
+      background: #e8f6ec;
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+
+    .tip-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #222222;
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .tip-text {
+      font-size: 14.5px;
+      color: #555555;
+      line-height: 1.8;
+    }
+
+    /* 热门排行 */
+    .rank-section {
+      max-width: 1200px;
+      margin: 10px auto 0;
+      padding: 0 20px 6px;
+      width: 100%;
+    }
+
+    .rank-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .rank-box h2 {
+      font-size: 19px;
+      margin-bottom: 14px;
+      color: #222;
+    }
+
+    .rank-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 8px 28px;
+    }
+
+    .rank-list li {
+      font-size: 15px;
+      color: #444;
+      padding: 7px 0;
+      border-bottom: 1px dashed #eeeeee;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .rank-num {
+      color: #f5a623;
+      font-weight: 700;
+      font-style: italic;
+      min-width: 18px;
+    }
+
+    /* 关于 */
+    .about-section {
+      max-width: 1200px;
+      margin: 16px auto 0;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .about-box {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+
+    .about-box h2 { font-size: 19px; margin-bottom: 10px; color: #222; }
+
+    .about-box p {
+      font-size: 14.5px;
+      color: #555;
+      line-height: 1.85;
+    }
+
+    /* 页脚 */
+    .footer {
+      text-align: center;
+      color: #999999;
+      font-size: 13.5px;
+      padding: 30px 20px 36px;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-title">生活小妙招</div>
+      <nav class="header-nav">
+        <a href="#tips">妙招大全</a>
+        <a href="#rank">热门排行</a>
+        <a href="#about">关于本站</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="banner">
+    <h1>每天学一招，日子更轻松</h1>
+    <p>家居、厨房、衣物、保鲜、健康、收纳——把麻烦事变简单的小窍门，都在这里。</p>
+  </section>
+
+  <section class="daily">
+    <div class="daily-card">
+      <span class="daily-badge">今日推荐</span>
+      <div>
+        <h2>{{DAILY_TITLE}}</h2>
+        <p>{{DAILY_TEXT}}</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-cat="all">全部</button>
+    <button class="filter-btn" data-cat="home">家居清洁</button>
+    <button class="filter-btn" data-cat="kitchen">厨房妙招</button>
+    <button class="filter-btn" data-cat="clothes">衣物护理</button>
+    <button class="filter-btn" data-cat="food">食品保鲜</button>
+    <button class="filter-btn" data-cat="health">健康日常</button>
+    <button class="filter-btn" data-cat="storage">收纳出行</button>
+  </div>
+
+  <main class="main-wrapper" id="tips">
+    <div class="tip-grid" id="tipGrid">
+{{CARDS}}
+
+    </div>
+  </main>
+
+  <section class="rank-section" id="rank">
+    <div class="rank-box">
+      <h2>本周热门妙招</h2>
+      <ol class="rank-list">
+{{RANK}}
+      </ol>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <div class="about-box">
+      <h2>关于本站</h2>
+      <p>「生活小妙招」是一个专注于日常实用技巧的小站，内容来自编辑团队的亲身实测和热心读者的投稿分享。我们相信，把日子过好不需要花大钱，多数难题家里现成的东西就能解决。本站每天更新一招，涵盖家居清洁、厨房烹饪、衣物护理、食品保鲜、健康日常与收纳出行六大类，所有妙招都经过实际验证才发布。如果你也有压箱底的好方法，欢迎通过页面底部的方式投稿，一经采用将署名刊登。</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    生活小妙招 · 每天学一招，日子更轻松<br>
+    © 2026 生活小妙招 版权所有 · 内容每日自动更新，最后更新 {{UPDATED}}
+  </footer>
+
+  <script>
+    (function () {
+      var buttons = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.tip-card');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var cat = btn.getAttribute('data-cat');
+          cards.forEach(function (card) {
+            if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
